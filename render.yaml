@@ -1,0 +1,50 @@
+# Render Blueprint for Expense Tracker Application
+# This file defines all services needed for deployment
+
+services:
+  # Backend FastAPI Service
+  - type: web
+    name: expense-tracker-backend
+    runtime: python
+    region: oregon
+    plan: free
+    branch: main
+    rootDir: backend
+    buildCommand: pip install --upgrade pip && pip install -r requirements.txt
+    startCommand: uvicorn server:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/health
+    envVars:
+      - key: MONGO_URL
+        sync: false  # Set this manually in Render dashboard
+      - key: DB_NAME
+        value: expense_tracker_db
+      - key: CORS_ORIGINS
+        value: "*"
+      - key: GOOGLE_CLIENT_ID
+        sync: false  # Set this manually in Render dashboard
+      - key: GOOGLE_CLIENT_SECRET
+        sync: false  # Set this manually in Render dashboard
+      - key: FRONTEND_URL
+        sync: false  # Set this manually (your frontend URL)
+      - key: PYTHON_VERSION
+        value: 3.11.0
+
+  # Frontend React Static Site
+  - type: web
+    name: expense-tracker-frontend
+    runtime: node
+    region: oregon
+    plan: free
+    branch: main
+    rootDir: frontend
+    buildCommand: yarn install && yarn build
+    staticPublishPath: ./build
+    envVars:
+      - key: REACT_APP_BACKEND_URL
+        sync: false  # Set this manually (your backend URL)
+      - key: NODE_VERSION
+        value: 18.0.0
+
+# Note: MongoDB needs to be set up separately
+# Option 1: Use MongoDB Atlas (Recommended) - https://www.mongodb.com/cloud/atlas
+# Option 2: Use a managed MongoDB service on Render or elsewhere

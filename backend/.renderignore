@@ -1,0 +1,10 @@
+# Backend-specific files to ignore
+
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.env.local
+.env.development
+tests/

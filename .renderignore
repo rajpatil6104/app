@@ -1,0 +1,43 @@
+# Files to ignore during Render deployment
+
+# Development
+node_modules/
+.git/
+.emergent/
+
+# Environment files
+.env.local
+.env.development
+.env.test
+
+# Testing
+test_result.md
+test_reports/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build artifacts (only for backend)
+dist/
+build/
+*.egg-info/
