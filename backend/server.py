@@ -449,6 +449,27 @@ async def export_csv(request: Request, month: Optional[str] = None):
         headers={"Content-Disposition": f"attachment; filename=expenses_{month or 'all'}.csv"}
     )
 
+@api_router.get("/health")
+async def health_check():
+    """Health check endpoint for Render deployment"""
+    try:
+        # Check database connection
+        await db.command('ping')
+        return {
+            "status": "healthy",
+            "service": "expense-tracker-backend",
+            "database": "connected",
+            "timestamp": datetime.now(timezone.utc).isoformat()
+        }
+    except Exception as e:
+        return {
+            "status": "unhealthy",
+            "service": "expense-tracker-backend",
+            "database": "disconnected",
+            "error": str(e),
+            "timestamp": datetime.now(timezone.utc).isoformat()
+        }
+
 app.include_router(api_router)
 
 app.add_middleware(
